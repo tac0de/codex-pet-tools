@@ -92,6 +92,15 @@ def normalize(atlas, bands, resampling, target_width=None, baseline=None):
     return output
 
 
+def save_atlas(atlas, output):
+    if output.suffix.lower() == ".webp":
+        atlas.save(output, format="WEBP", lossless=True, exact=True)
+    elif output.suffix.lower() == ".png":
+        atlas.save(output, format="PNG")
+    else:
+        raise ValueError("output must be .webp or .png")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("input", type=Path)
@@ -121,12 +130,7 @@ def main():
         resampling = Image.Resampling.NEAREST if args.pixel_art else Image.Resampling.LANCZOS
         with Image.open(args.input) as source:
             output = normalize(source.convert("RGBA"), bands, resampling, args.target_width, args.baseline)
-        if args.output.suffix.lower() == ".webp":
-            output.save(args.output, format="WEBP", lossless=True, exact=True)
-        elif args.output.suffix.lower() == ".png":
-            output.save(args.output, format="PNG")
-        else:
-            raise ValueError("output must be .webp or .png")
+        save_atlas(output, args.output)
     except (ValueError, OSError) as error:
         parser.exit(1, f"{error}\n")
 

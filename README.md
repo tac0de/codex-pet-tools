@@ -20,6 +20,14 @@ The median face width in the idle row sets the target. Each specified state rece
 
 The input can be a transparent 1536 × 2288 Codex v2 sheet or a 1536 × 1872 intermediate with the nine standard rows. To set a common scale and ground line across a collection, pass `--target-width` and `--baseline` on an intermediate and provide a band for all nine rows. Then register the two look rows against the new idle frame before packaging. The output is a separate PNG or lossless WebP. Preview the transition between idle and the adjusted states before installing. See the [Codex pet contract](https://github.com/openai/skills/blob/main/skills/.curated/hatch-pet/references/codex-pet-contract.md).
 
+## Align look poses with idle
+
+```sh
+python3 align_look.py assembled.webp aligned.webp
+```
+
+This moves both look rows and the optional desktop neutral look pose by one vertical offset, with no scaling or pixel interpolation. It refuses any move that would clip a pose.
+
 ## Package a validated sheet
 
 ```sh
