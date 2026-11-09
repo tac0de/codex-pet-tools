@@ -38,25 +38,30 @@ def face_width(frame, band):
     return max((span[2] - span[0] for span in spans if span), default=0)
 
 
-def atlas_rows(atlas):
-    expected_size = (COLUMNS * CELL_WIDTH, len(STATES) * CELL_HEIGHT)
+def atlas_rows(atlas, allow_intermediate=False):
+    row_count = 9 if allow_intermediate and atlas.height == 9 * CELL_HEIGHT else len(STATES)
+    expected_size = (COLUMNS * CELL_WIDTH, row_count * CELL_HEIGHT)
     if atlas.size != expected_size:
-        raise ValueError(f"expected a Codex v2 atlas of size {expected_size}")
+        raise ValueError(f"expected a Codex atlas of size {expected_size}")
 
-    for row, (state, count) in enumerate(STATES):
+    for row, (state, count) in enumerate(STATES[:row_count]):
         cells = [atlas.crop(box(row, column)) for column in range(COLUMNS)]
         bounds = [cell.getbbox() for cell in cells]
         # Extended sheets may have a neutral look pose in idle column 7.
-        unused = bounds[count + 1:] if row == 0 else bounds[count:]
+        has_neutral_slot = row == 0 and row_count == len(STATES)
+        unused = bounds[count + int(has_neutral_slot):]
         if not all(bounds[:count]) or any(unused):
             raise ValueError(f"{state} has missing or unexpected frames")
         yield row, state, cells[:count], bounds[:count]
 
 
-def normalize(atlas, bands, resampling):
+def normalize(atlas, bands, resampling, target_width=None, baseline=None):
+    if target_width is not None or baseline is not None:
+        if atlas.height != 9 * CELL_HEIGHT or set(bands) != {state for state, _ in STATES[:9]}:
+            raise ValueError("target width and baseline require all nine bands on a standard-row intermediate")
     output = atlas.copy()
     reference_width = reference_floor = None
-    for row, state, cells, bounds in atlas_rows(atlas):
+    for row, state, cells, bounds in atlas_rows(atlas, allow_intermediate=True):
         if state not in bands:
             continue
 
@@ -66,8 +71,10 @@ def normalize(atlas, bands, resampling):
         width = median(widths)
         floor = max(bound[3] for bound in bounds)
         if row == 0:
-            reference_width, reference_floor = width, floor
-            continue
+            reference_width = target_width if target_width is not None else width
+            reference_floor = baseline if baseline is not None else floor
+            if target_width is None and baseline is None:
+                continue
 
         factor = reference_width / width
         print(f"{state}: {width:g} px → {reference_width:g} px ({factor:.3f}×)")
@@ -90,6 +97,8 @@ def main():
     parser.add_argument("input", type=Path)
     parser.add_argument("output", type=Path)
     parser.add_argument("--band", action="append", required=True, metavar="STATE:TOP:BOTTOM")
+    parser.add_argument("--target-width", type=int, help="set the face width in pixels, including idle")
+    parser.add_argument("--baseline", type=int, help="set the lowest bottom edge in pixels, including idle")
     parser.add_argument("--pixel-art", action="store_true", help="use nearest-neighbor sampling")
     args = parser.parse_args()
     bands = {}
@@ -103,11 +112,15 @@ def main():
             bands[state] = band
         if "idle" not in bands or len(bands) < 2:
             raise ValueError("specify a band for idle and at least one animation state")
+        if args.target_width is not None and not 1 <= args.target_width <= CELL_WIDTH:
+            raise ValueError("target width must be between 1 and 192 px")
+        if args.baseline is not None and not 1 <= args.baseline <= CELL_HEIGHT:
+            raise ValueError("baseline must be between 1 and 208 px")
         if args.input.resolve() == args.output.resolve():
             raise ValueError("choose a separate output path")
         resampling = Image.Resampling.NEAREST if args.pixel_art else Image.Resampling.LANCZOS
         with Image.open(args.input) as source:
-            output = normalize(source.convert("RGBA"), bands, resampling)
+            output = normalize(source.convert("RGBA"), bands, resampling, args.target_width, args.baseline)
         if args.output.suffix.lower() == ".webp":
             output.save(args.output, format="WEBP", lossless=True, exact=True)
         elif args.output.suffix.lower() == ".png":

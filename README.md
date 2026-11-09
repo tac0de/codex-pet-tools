@@ -18,7 +18,7 @@ The example band coordinates are relative to each 192 × 208 cell, with an inclu
 
 The median face width in the idle row sets the target. Each specified state receives one uniform scale across all of its frames. The lowest bottom edge in that row aligns with the lowest idle bottom edge. Relative vertical displacement is preserved in pixels, including jump height. The tool rejects a transform that would clip a frame. Idle, both look rows, and any unlisted state pass through unchanged.
 
-The input must be a transparent 1536 × 2288 Codex v2 sheet. The output is a separate PNG or lossless WebP. Preview the transition between idle and the adjusted states before installing. See the [Codex pet contract](https://github.com/openai/skills/blob/main/skills/.curated/hatch-pet/references/codex-pet-contract.md).
+The input can be a transparent 1536 × 2288 Codex v2 sheet or a 1536 × 1872 intermediate with the nine standard rows. To set a common scale and ground line across a collection, pass `--target-width` and `--baseline` on an intermediate and provide a band for all nine rows. Then register the two look rows against the new idle frame before packaging. The output is a separate PNG or lossless WebP. Preview the transition between idle and the adjusted states before installing. See the [Codex pet contract](https://github.com/openai/skills/blob/main/skills/.curated/hatch-pet/references/codex-pet-contract.md).
 
 ## Package a validated sheet
 
