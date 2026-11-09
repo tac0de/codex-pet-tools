@@ -1,0 +1,42 @@
+{
+  "chiikawa-usagi": {
+    "en": ["Usagi", "Long ears, rosy cheeks, and a spring in every step."],
+    "ja": ["うさぎ", "長い耳とピンクのほっぺが目印。元気にぴょんぴょん跳ねます。"],
+    "ko": ["우사기", "긴 귀와 분홍 볼이 매력적인 우사기. 통통 뛰며 함께 일해요."]
+  },
+  "chiikawa": {
+    "en": ["Chiikawa", "A shy little friend with a soft white coat and pink cheeks."],
+    "ja": ["ちいかわ", "白くて小さな、ピンクのほっぺの恥ずかしがり屋。"],
+    "ko": ["치이카와", "작고 하얀 몸에 분홍 볼을 가진 수줍은 친구예요."]
+  },
+  "hachiware": {
+    "en": ["Hachiware", "A cheerful companion with blue ears and a split blue cap."],
+    "ja": ["ハチワレ", "青い耳とハチワレ模様が目印の明るい仲間。"],
+    "ko": ["하치와레", "파란 귀와 갈라진 머리 무늬가 있는 명랑한 친구예요."]
+  },
+  "momonga": {
+    "en": ["Momonga", "An expressive little mischief-maker with a fluffy blue tail."],
+    "ja": ["モモンガ", "ふわふわの青いしっぽを持つ、表情豊かないたずらっ子。"],
+    "ko": ["모몽가", "복슬복슬한 하늘색 꼬리를 가진 장난꾸러기예요."]
+  },
+  "kurimanju": {
+    "en": ["Kurimanju", "A laid-back friend with a chestnut-brown cap."],
+    "ja": ["くりまんじゅう", "栗色の頭と、のんびりした表情が目印の仲間。"],
+    "ko": ["쿠리만쥬", "밤색 머리와 여유로운 표정이 특징이에요."]
+  },
+  "rakko": {
+    "en": ["Rakko", "A brave little hunter with a brow scar and a short cape."],
+    "ja": ["ラッコ", "額の傷と短いマントが目印の頼れる討伐の先輩。"],
+    "ko": ["랏코", "이마의 흉터와 짧은 망토가 특징인 든든한 사냥꾼이에요."]
+  },
+  "shisa": {
+    "en": ["Shisa", "A sunny little friend with peach-colored brows and a curly mane."],
+    "ja": ["シーサー", "桃色のまゆと、くるんとしたたてがみが目印の元気な仲間。"],
+    "ko": ["시사", "복숭아색 눈썹과 둥글게 말린 갈기를 가진 밝은 친구예요."]
+  },
+  "furuhonya": {
+    "en": ["Furuhonya", "A gentle pink bookworm in a crab-shaped headband."],
+    "ja": ["古本屋", "カニのカチューシャをつけた、心優しいピンクの本好き。"],
+    "ko": ["헌책방", "게 모양 머리띠를 쓴 다정한 분홍색 책벌레예요."]
+  }
+}
